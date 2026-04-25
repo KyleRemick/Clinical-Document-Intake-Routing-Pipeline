@@ -2,49 +2,6 @@
 
 A backend service for automated clinical document intake, text extraction, classification, patient matching, and routing. Documents are submitted through an HTTP API, processed through a rules-based pipeline, and assigned to workflow queues. Low-confidence results are held for manual review rather than forced through automation.
 
-flowchart TD
-    START([📄 PDF or image\nuploaded via API]) --> SAVE[Create Document record\nSave file to disk]
-    SAVE --> AUDIT1([🔵 Audit: received])
-
-    AUDIT1 --> EXTRACT{Text extraction}
-    EXTRACT -->|Text layer present| PDF[pdfplumber]
-    EXTRACT -->|Empty or sparse| OCR[pytesseract OCR]
-    PDF --> EXT_DONE[ExtractionResult]
-    OCR --> EXT_DONE
-    EXT_DONE --> AUDIT2([🔵 Audit: extracted])
-
-    AUDIT2 --> FAIL_CHECK{Extraction\nfailed?}
-    FAIL_CHECK -->|Yes| MR_FAIL[/manual_review\nextraction failed/]
-    FAIL_CHECK -->|No| CLASSIFY[Signal-based classifier\nreturns doc_type + confidence]
-    CLASSIFY --> AUDIT3([🔵 Audit: classified])
-
-    AUDIT3 --> CONF_CHECK{confidence\n< 0.50?}
-    CONF_CHECK -->|Yes| MR_CONF[/manual_review\nlow confidence/]
-    CONF_CHECK -->|No| PARSE[Regex metadata parser\nMRN · name · DOB · date]
-
-    PARSE --> MATCH[Weighted patient matcher\nMRN 70% · DOB 20% · name 10%]
-    MATCH --> AUDIT4([🔵 Audit: matched])
-
-    AUDIT4 --> ADMIN_CHECK{doc_type =\nadministrative?}
-    ADMIN_CHECK -->|Yes| AR[/admin_review/]
-    ADMIN_CHECK -->|No| MATCH_CHECK{Patient\nmatched?\nscore ≥ 0.50}
-    MATCH_CHECK -->|No| MR_MATCH[/manual_review\nno patient match/]
-    MATCH_CHECK -->|Yes| ROUTE{Route by\ndocument type}
-
-    ROUTE -->|lab_result\ndischarge_summary\nimaging_report| PR[/provider_review/]
-    ROUTE -->|referral\nmedication_update| CR[/coordinator_review/]
-    ROUTE -->|unknown| MR_UNK[/manual_review\nunknown type/]
-
-    PR --> AUDIT5([🔵 Audit: routed])
-    CR --> AUDIT5
-    AR --> AUDIT5
-    MR_FAIL --> AUDIT5
-    MR_CONF --> AUDIT5
-    MR_MATCH --> AUDIT5
-    MR_UNK --> AUDIT5
-
-    AUDIT5 --> RESPONSE([✅ Return DocumentRead\nwith full audit trail])
-
 ## Requirements
 
 - Python 3.11+
