@@ -1,0 +1,22 @@
+[
+  {"mrn": "MRN-10001", "first_name": "James",    "last_name": "Whitfield",  "dob": "1948-03-14"},
+  {"mrn": "MRN-10002", "first_name": "Dorothy",  "last_name": "Nguyen",     "dob": "1955-07-22"},
+  {"mrn": "MRN-10003", "first_name": "Robert",   "last_name": "Castillo",   "dob": "1962-11-05"},
+  {"mrn": "MRN-10004", "first_name": "Margaret", "last_name": "Okafor",     "dob": "1939-01-30"},
+  {"mrn": "MRN-10005", "first_name": "Thomas",   "last_name": "Bergmann",   "dob": "1957-09-18"},
+  {"mrn": "MRN-10006", "first_name": "Helen",    "last_name": "Kowalski",   "dob": "1944-06-03"},
+  {"mrn": "MRN-10007", "first_name": "Charles",  "last_name": "Mbeki",      "dob": "1971-12-27"},
+  {"mrn": "MRN-10008", "first_name": "Patricia", "last_name": "Delacroix",  "dob": "1950-04-09"},
+  {"mrn": "MRN-10009", "first_name": "George",   "last_name": "Tanaka",     "dob": "1965-08-15"},
+  {"mrn": "MRN-10010", "first_name": "Barbara",  "last_name": "Ellison",    "dob": "1958-02-21"},
+  {"mrn": "MRN-10011", "first_name": "William",  "last_name": "Oduya",      "dob": "1942-10-07"},
+  {"mrn": "MRN-10012", "first_name": "Carol",    "last_name": "Hartmann",   "dob": "1968-05-14"},
+  {"mrn": "MRN-10013", "first_name": "Richard",  "last_name": "Nakamura",   "dob": "1953-03-28"},
+  {"mrn": "MRN-10014", "first_name": "Susan",    "last_name": "Petrov",     "dob": "1947-07-11"},
+  {"mrn": "MRN-10015", "first_name": "Joseph",   "last_name": "Anand",      "dob": "1975-01-19"},
+  {"mrn": "MRN-10016", "first_name": "Karen",    "last_name": "Fitzgerald",  "dob": "1961-09-04"},
+  {"mrn": "MRN-10017", "first_name": "Daniel",   "last_name": "Sorensen",   "dob": "1980-06-22"},
+  {"mrn": "MRN-10018", "first_name": "Nancy",    "last_name": "Okonkwo",    "dob": "1936-11-17"},
+  {"mrn": "MRN-10019", "first_name": "Paul",     "last_name": "Vasquez",    "dob": "1969-04-30"},
+  {"mrn": "MRN-10020", "first_name": "Betty",    "last_name": "Lindqvist",  "dob": "1945-08-08"}
+]
