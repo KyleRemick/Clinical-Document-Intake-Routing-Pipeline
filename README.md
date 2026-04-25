@@ -109,6 +109,55 @@ Upload → Extract → Classify → Parse Metadata → Match Patient → Route �
 5. **Route** — document assigned to a workflow queue based on type and match confidence
 6. **Audit** — each stage appends a timestamped event record to the document's audit trail
 
+```mermaid
+flowchart TD
+    START([PDF or image\nuploaded via API]) --> SAVE[Save file\nCreate Document record]
+    SAVE --> A1[Audit: received]
+
+    A1 --> EXT{Extract text}
+    EXT -->|text layer| PDF[pdfplumber]
+    EXT -->|empty / sparse| OCR[pytesseract OCR]
+    PDF & OCR --> A2[Audit: extracted]
+
+    A2 --> XFAIL{Extraction\nfailed?}
+    XFAIL -->|yes| MR_FAIL[manual_review]
+    XFAIL -->|no| CLS[Signal classifier\ndoc_type · confidence 0–1]
+
+    CLS --> A3[Audit: classified]
+    A3 --> CONF{confidence\n< 0.50?}
+    CONF -->|yes| MR_CONF[manual_review]
+    CONF -->|no| PARSE[Regex metadata parser\nMRN · name · DOB · date]
+
+    PARSE --> MATCH[Weighted patient matcher\nMRN 70% · DOB 20% · name 10%]
+    MATCH --> A4[Audit: matched]
+
+    A4 --> ADMIN{administrative\ndocument?}
+    ADMIN -->|yes| AR[admin_review]
+    ADMIN -->|no| PATIENT{Patient matched?\nscore ≥ 0.50}
+    PATIENT -->|no| MR_PAT[manual_review]
+    PATIENT -->|yes| ROUTE{Document type}
+
+    ROUTE -->|lab · discharge · imaging| PR[provider_review]
+    ROUTE -->|referral · medication| CR[coordinator_review]
+    ROUTE -->|unknown| MR_UNK[manual_review]
+
+    PR & CR & AR & MR_FAIL & MR_CONF & MR_PAT & MR_UNK --> A5[Audit: routed]
+    A5 --> DONE([DocumentRead returned\nwith full audit trail])
+
+    style MR_FAIL fill:#ffcccc,stroke:#cc0000
+    style MR_CONF fill:#ffcccc,stroke:#cc0000
+    style MR_PAT  fill:#ffcccc,stroke:#cc0000
+    style MR_UNK  fill:#ffcccc,stroke:#cc0000
+    style AR      fill:#ffe0b2,stroke:#e65100
+    style PR      fill:#c8e6c9,stroke:#2e7d32
+    style CR      fill:#bbdefb,stroke:#1565c0
+    style A1      fill:#e8eaf6,stroke:#3949ab
+    style A2      fill:#e8eaf6,stroke:#3949ab
+    style A3      fill:#e8eaf6,stroke:#3949ab
+    style A4      fill:#e8eaf6,stroke:#3949ab
+    style A5      fill:#e8eaf6,stroke:#3949ab
+```
+
 ## Confidence Scoring
 
 ### Classification
