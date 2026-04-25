@@ -2,6 +2,8 @@
 
 A backend service for automated clinical document intake, text extraction, classification, patient matching, and routing. Documents are submitted through an HTTP API, processed through a rules-based pipeline, and assigned to workflow queues. Low-confidence results are held for manual review rather than forced through automation.
 
+This project focuses on **application-layer design**: classification logic, patient identity resolution, audit trails, and domain modeling — built as a self-contained FastAPI service rather than a composition of cloud-managed services. For a serverless AWS approach to the same problem domain, see [intelligent-document-routing-pipeline](https://github.com/KyleRemick/intelligent-document-routing-pipeline).
+
 ## Requirements
 
 - Python 3.11+
